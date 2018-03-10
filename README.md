@@ -6,7 +6,7 @@ The database is just an sqlite3 file, requires python3.
 
 The database allows concurrent readers, but a writing process will cause all others to wait up 5 seconds to aquire a lock, aborting with a non zero error code on timeout.
 
-The default database is ./kv.db, set exits with code 111 if a key does not exist.
+The default database is ./kv.db, get exits with code 111 if a key does not exist.
 
 Help strings:
 
