@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+import sys
+import sqlite3
+import argparse
+
+parser = argparse.ArgumentParser(description='Simple key value store using sqlite3.')
+parser.add_argument('--db', default='./kv.db' , help='database file')
+subparser = parser.add_subparsers()
+get_parser = subparser.add_parser('get')
+get_parser.add_argument('get_key')
+set_parser = subparser.add_parser('del')
+set_parser.add_argument('del_key')
+set_parser = subparser.add_parser('set')
+set_parser.add_argument('set_key')
+set_parser.add_argument('set_value')
+
+args = vars(parser.parse_args())
+
+conn = sqlite3.connect(args['db'])
+c = conn.cursor()
+c.execute("CREATE TABLE IF NOT EXISTS Data (Key TEXT UNIQUE, Value TEXT);")
+
+rc = 0
+
+if 'set_key' in args and 'set_value' in args:
+    c.execute("INSERT OR REPLACE INTO Data(Key, Value) VALUES (?, ?);", (args["set_key"], args["set_value"]))
+elif 'get_key' in args:
+    c.execute("SELECT Value FROM Data WHERE Key = ?;", (args["get_key"],))
+    r = c.fetchone()
+    if r is not None:
+        print(r[0])
+    rc = 111
+elif 'del_key' in args:
+    c.execute("DELETE Data WHERE Key = ?;", (args["del_key"],))
+else:
+    rc = 1
+
+conn.commit()
+conn.close()
+sys.exit(rc)
