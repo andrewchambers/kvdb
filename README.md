@@ -47,7 +47,7 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
-  -n          print a new line after the value
+  -n          don't print a new line after the value
 
 ```
 
