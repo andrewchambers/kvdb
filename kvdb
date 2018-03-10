@@ -41,7 +41,7 @@ elif 'get_key' in args:
     else:
         rc = 111
 elif 'del_key' in args:
-    c.execute("DELETE Data WHERE Key = ?;", (args["del_key"],))
+    c.execute("DELETE FROM Data WHERE Key = ?;", (args["del_key"],))
 else:
     rc = 1
 
