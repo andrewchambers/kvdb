@@ -1,10 +1,12 @@
 # kvdb
 
-A key value database for the command line, safe in the event of power loss and safe for concurrent use.
+A key value database for the command line, writes and reads are atomic, ordered and safe in the event of power loss. 
 
 The database is just an sqlite3 file, requires python3.
 
-The default database is ./kv.db, set returns 111 if a key does not exist.
+The database allows concurrent readers, but a writing process will cause all others to wait up 5 seconds to aquire a lock, aborting with a non zero error code on timeout.
+
+The default database is ./kv.db, set exits with code 111 if a key does not exist.
 
 Help strings:
 
