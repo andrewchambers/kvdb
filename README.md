@@ -26,7 +26,7 @@ optional arguments:
 
 ```
 $ kvdb set --help
-usage: kvdb set [-h] set_key set_value
+usage: kvdb set [-h] [-f] set_key set_value
 
 positional arguments:
   set_key
@@ -34,19 +34,20 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
+  -f          read the file at path set_value as the value
 
 ```
 
 ```
 $ kvdb get --help
-usage: kvdb get [-h] get_key
+usage: kvdb get [-h] [-n] get_key
 
 positional arguments:
   get_key
 
 optional arguments:
   -h, --help  show this help message and exit
-
+  -n          print a new line after the value
 
 ```
 

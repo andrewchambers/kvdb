@@ -9,9 +9,11 @@ parser.add_argument('--db', default='./kv.db' , help='database file')
 subparser = parser.add_subparsers()
 get_parser = subparser.add_parser('get')
 get_parser.add_argument('get_key')
-set_parser = subparser.add_parser('del')
-set_parser.add_argument('del_key')
+get_parser.add_argument('-n', action='store_true', help='print a new line after the value')
+del_parser = subparser.add_parser('del')
+del_parser.add_argument('del_key')
 set_parser = subparser.add_parser('set')
+set_parser.add_argument('-f', action='store_true', help='read the file at path set_value as the value')
 set_parser.add_argument('set_key')
 set_parser.add_argument('set_value')
 
@@ -24,12 +26,19 @@ c.execute("CREATE TABLE IF NOT EXISTS Data (Key TEXT UNIQUE, Value TEXT);")
 rc = 0
 
 if 'set_key' in args and 'set_value' in args:
-    c.execute("INSERT OR REPLACE INTO Data(Key, Value) VALUES (?, ?);", (args["set_key"], args["set_value"]))
+    value = args["set_value"]
+    if args['f']:
+        with open(value) as f:
+            value = f.read()
+    c.execute("INSERT OR REPLACE INTO Data(Key, Value) VALUES (?, ?);", (args["set_key"], value))
 elif 'get_key' in args:
     c.execute("SELECT Value FROM Data WHERE Key = ?;", (args["get_key"],))
     r = c.fetchone()
     if r is not None:
-        print(r[0])
+        sys.stdout.write(r[0])
+        if not args['n']:
+            sys.stdout.write('\n')
+
     rc = 111
 elif 'del_key' in args:
     c.execute("DELETE Data WHERE Key = ?;", (args["del_key"],))
@@ -38,4 +47,5 @@ else:
 
 conn.commit()
 conn.close()
+sys.stdout.flush()
 sys.exit(rc)
