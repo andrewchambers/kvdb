@@ -38,8 +38,8 @@ elif 'get_key' in args:
         sys.stdout.write(r[0])
         if not args['n']:
             sys.stdout.write('\n')
-
-    rc = 111
+    else:
+        rc = 111
 elif 'del_key' in args:
     c.execute("DELETE Data WHERE Key = ?;", (args["del_key"],))
 else:
